@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "139689491109",
+    "firebase_url": "https://hp-tracker-2bcd4-default-rtdb.firebaseio.com",
+    "project_id": "hp-tracker-2bcd4",
+    "storage_bucket": "hp-tracker-2bcd4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139689491109:android:068d51e881ef9e4dc9eb4c",
+        "android_client_info": {
+          "package_name": "com.example.hptracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6tLJ6cOvYNHxIXDwAY8Ia06_mividYO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

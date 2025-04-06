@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+
+    <style>
+        * {
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #fff;
+        }
+        .header {
+            min-height: 80px;
+            margin: 0 48px;
+            border-bottom: #ddd 2px solid;
+        }
+        .body-wrapper {
+            flex: 1;
+            display: flex;
+        }
+        .sidebar {
+            flex: 3;
+            padding-top: 48px;
+            margin: 2px 0 48px 0;
+            border-right: #ddd 1px solid;
+        }
+        .main {
+            flex: 10;
+        }
+        .content-wrapper {
+            margin: 0 0 48px auto;
+            max-width: 150px;
+        }
+        .menu {
+            padding: .5em;
+            cursor: pointer;
+        }
+        .main-wrapper {
+            margin: 48px auto 48px 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        #hide {
+            display: none;
+        }
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        tr:hover {
+            background: #d1ecf1;
+        }
+        .btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #218838;
+        }
+        
+        /* Patient ID Input Section */
+        .patient-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+        input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn-show {
+            background: #007bff;
+            color: white;
+        }
+        .btn-show:hover {
+            background: #0056b3;
+        }
+        .btn-add {
+            background: #ff9800;
+            color: white;
+        }
+        .btn-add:hover {
+            background: #e68900;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header"></header>
+        <main class="body-wrapper">
+            <div class="sidebar">
+                <div class="content-wrapper">
+                    <div class="menu">Home</div>
+                    <div class="menu" id="history">History</div>
+                    <ul class="styled-list" id="hide">
+                        <li>Item 1</li>
+                        <li>Item 2</li>
+                        <li>Item 3</li>
+                        <li>Item 4</li>
+                    </ul>
+                    <div class="menu">About us</div>
+                </div>
+            </div>
+            <div class="main">
+                <div class="main-wrapper">
+                    <h1 id="name" class="name">Hello Doctor!!</h1>
+
+                    <!-- Patient ID Input Section -->
+                    <div class="patient-input">
+                        <input type="text" id="patientId" placeholder="Enter Patient ID">
+                        <button class="btn btn-show" onclick="showPrescription()">Show</button>
+                        <button class="btn btn-add" onclick="addPrescription()">Add Prescription</button>
+                    </div>
+
+                    <!-- Appointments Table -->
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Sr No</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Open</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById("history").addEventListener("click", function () {
+            let element = document.getElementById("hide");
+            element.style.display = element.style.display === "block" ? "none" : "block";
+        });
+
+        let list = [
+            { "DocterName": "Harish Nihare", "Date": "12/11/2025" },
+            { "DocterName": "Aryan Rathod", "Date": "12/11/2025" },
+            { "DocterName": "Aryan Rathod", "Date": "12/11/2025" },
+            { "DocterName": "Shri Pad", "Date": "12/11/2025" }
+        ];
+
+        let tableBody = document.getElementById("table-body");
+
+        list.forEach((item, index) => {
+            let row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${item.DocterName}</td>
+                <td>${item.Date}</td>
+                <td><button class="btn" onclick="openDetails('${item.DocterName}')">Click</button></td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        function openDetails(name) {
+            alert("Opening details for " + name);
+        }
+
+        function showPrescription() {
+            let id = document.getElementById("patientId").value;
+            if (id) {
+                alert("Showing prescription for Patient ID: " + id);
+            } else {
+                alert("Please enter a Patient ID.");
+            }
+        }
+
+        function addPrescription() {
+            let id = document.getElementById("patientId").value;
+            if (id) {
+                alert("Adding prescription for Patient ID: " + id);
+            } else {
+                alert("Please enter a Patient ID.");
+            }
+        }
+    </script>
+
+</body>
+</html>

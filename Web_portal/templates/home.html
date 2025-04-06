@@ -1,0 +1,383 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Management</title>
+    <link rel="stylesheet" href="static/styles.css">
+ 
+    <script>
+        async function addPatient() {
+            const patientData = {
+                pid: document.getElementById("pid").value,
+                name: document.getElementById("name").value,
+                age: parseInt(document.getElementById("age").value),
+                gender: document.getElementById("gender").value,
+                weight: parseFloat(document.getElementById("weight").value),
+                caretaker: document.getElementById("caretaker").value.split(","),
+                idON: document.getElementById("idON").checked,
+                application_id: document.getElementById("app_id").value
+            };
+
+            const response = await fetch('/add_patient', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(patientData)
+            });
+
+            const data = await response.json();
+            alert(data.message);
+        }
+
+        async function addPrescription() {
+            const prescriptionData = {
+                pid: document.getElementById("p_pid").value,
+                date: document.getElementById("p_date").value,
+                doctor: document.getElementById("p_doctor").value,
+                medicine: document.getElementById("p_medicine").value,
+                description: document.getElementById("p_description").value,
+                end: document.getElementById("p_end").value,
+                time: document.getElementById("p_time").value
+            };
+
+            const response = await fetch('/add_prescription', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(prescriptionData)
+            });
+
+            const data = await response.json();
+            alert(data.message);
+        }
+
+        async function getPatient() {
+            const pid = document.getElementById("g_pid").value;
+            const response = await fetch(`/get_patient/${pid}`);
+            const data = await response.json();
+        
+            if (data.error) {
+                document.getElementById("patientDetails").innerHTML = `<div class="error">${data.error}</div>`;
+            } else {
+                document.getElementById("patientDetails").innerHTML = `
+                    <table class="styled-table">
+                        <tr><th>Name</th><td>${data.name}</td></tr>
+                        <tr><th>Age</th><td>${data.age}</td></tr>
+                        <tr><th>Gender</th><td>${data.gender}</td></tr>
+                        <tr><th>Weight</th><td>${data.weight} kg</td></tr>
+                        <tr><th>Caretaker(s)</th><td>${data.caretaker.join(", ")}</td></tr>
+                        <tr><th>ID ON</th><td>${data.idON ? "Yes" : "No"}</td></tr>
+                        <tr><th>Application ID</th><td>${data.application_id}</td></tr>
+                    </table>
+                `;
+            }
+        }
+        
+        async function getPrescriptions() {
+            const pid = document.getElementById("g_pid").value;
+            const response = await fetch(`/get_prescriptions/${pid}`);
+            const data = await response.json();
+        
+            if (data.length === 0) {
+                document.getElementById("prescriptionDetails").innerHTML = `<div class="error">No prescriptions found.</div>`;
+                return;
+            }
+        
+            let formattedPrescriptions = `<table class="styled-table">
+                <tr>
+                    <th>#</th><th>Date</th><th>Doctor</th><th>Medicine</th><th>Description</th><th>End Date</th><th>Time</th>
+                </tr>`;
+        
+            data.forEach((prescription, index) => {
+                formattedPrescriptions += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${prescription.date}</td>
+                        <td>${prescription.doctor}</td>
+                        <td>${prescription.medicine}</td>
+                        <td>${prescription.description}</td>
+                        <td>${prescription.end}</td>
+                        <td>${prescription.time}</td>
+                    </tr>
+                `;
+            });
+        
+            formattedPrescriptions += `</table>`;
+            document.getElementById("prescriptionDetails").innerHTML = formattedPrescriptions;
+        }
+        
+    </script>
+    
+</head>
+<body>
+    
+
+    <div class="container">
+        <h1>Medicine Management System</h1>
+
+         Add Patient Form -->
+        <!-- <div class="card">
+            <h2>Add Patient</h2>
+            <input type="text" id="pid" placeholder="Patient ID"><br>
+            <input type="text" id="name" placeholder="Name"><br>
+            <input type="number" id="age" placeholder="Age"><br>
+            <input type="text" id="gender" placeholder="Gender"><br>
+            <input type="number" step="0.1" id="weight" placeholder="Weight"><br>
+            <input type="text" id="caretaker" placeholder="Caretakers (comma-separated)"><br>
+            <label><input type="checkbox" id="idON"> ID ON</label><br>
+            <input type="text" id="app_id" placeholder="Application ID"><br>
+            <button onclick="addPatient()">Add Patient</button>
+        </div>
+
+        <div class="card">
+            <h2>Add Prescription</h2>
+            <input type="text" id="p_pid" placeholder="Patient ID"><br>
+            <input type="date" id="p_date"><br>
+            <input type="text" id="p_doctor" placeholder="Doctor Name"><br>
+            <input type="text" id="p_medicine" placeholder="Medicine Name"><br>
+            <input type="text" id="p_description" placeholder="Description"><br>
+            <input type="date" id="p_end" placeholder="End Date"><br>
+            <input type="time" id="p_time" placeholder="Time"><br>
+            <button onclick="addPrescription()">Add Prescription</button>
+        </div>
+
+        <div class="card">
+            <h2>Fetch Patient Details</h2>
+            <input type="text" id="g_pid" placeholder="Patient ID">
+            <button onclick="getPatient()">Get Patient</button>
+            <button onclick="getPrescriptions()">Get Prescriptions</button>
+            <h3>Patient Details:</h3>
+            <pre id="patientDetails"></pre>
+            <h3>Prescription Details:</h3>
+            <pre id="prescriptionDetails"></pre>
+        </div>
+    </div>
+
+</body>
+</html>  -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Management</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            text-align: left;
+            font-size: 16px;
+            width: 100%;
+        }
+        .sidebar button:hover, .sidebar button.active {
+            background: #3498db;
+            border-radius: 5px;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+        .card {
+            display: none;
+        }
+        .card.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <button class="active" onclick="showSection('fetchPatient')">Fetch Patient Details</button>
+        <button onclick="showSection('addPatient')">Add Patient</button>
+        <button onclick="showSection('addPrescription')">Add Prescription</button>
+    </div>
+    
+    <div class="content">
+        <h1>Medicine Management System</h1>
+        
+        <div id="fetchPatient" class="card active">
+            <h2>Fetch Patient Details</h2>
+            <input type="text" id="g_pid" placeholder="Patient ID">
+            <button onclick="getPatient()">Get Patient</button>
+            <button onclick="getPrescriptions()">Get Prescriptions</button>
+            <h3>Patient Details:</h3>
+            <pre id="patientDetails"></pre>
+            <h3>Prescription Details:</h3>
+            <pre id="prescriptionDetails"></pre>
+        </div>
+
+        <div id="addPatient" class="card">
+            <h2>Add Patient</h2>
+            <input type="text" id="pid" placeholder="Patient ID"><br>
+            <input type="text" id="name" placeholder="Name"><br>
+            <input type="number" id="age" placeholder="Age"><br>
+            <input type="text" id="gender" placeholder="Gender"><br>
+            <input type="number" step="0.1" id="weight" placeholder="Weight"><br>
+            <input type="text" id="caretaker" placeholder="Caretakers (comma-separated)"><br>
+            <label><input type="checkbox" id="idON"> ID ON</label><br>
+            <input type="text" id="app_id" placeholder="Application ID"><br>
+            <button onclick="addPatient()">Add Patient</button>
+        </div>
+
+        <div id="addPrescription" class="card">
+            <h2>Add Prescription</h2>
+            <input type="text" id="p_pid" placeholder="Patient ID"><br>
+            <input type="date" id="p_date"><br>
+            <input type="text" id="p_doctor" placeholder="Doctor Name"><br>
+            <input type="text" id="p_medicine" placeholder="Medicine Name"><br>
+            <input type="text" id="p_description" placeholder="Description"><br>
+            <input type="date" id="p_end" placeholder="End Date"><br>
+            <input type="time" id="p_time" placeholder="Time"><br>
+            <button onclick="addPrescription()">Add Prescription</button>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        async function addPatient() {
+            const patientData = {
+                pid: document.getElementById("pid").value,
+                name: document.getElementById("name").value,
+                age: parseInt(document.getElementById("age").value),
+                gender: document.getElementById("gender").value,
+                weight: parseFloat(document.getElementById("weight").value),
+                caretaker: document.getElementById("caretaker").value.split(","),
+                idON: document.getElementById("idON").checked,
+                application_id: document.getElementById("app_id").value
+            };
+
+            const response = await fetch('/add_patient', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(patientData)
+            });
+
+            const data = await response.json();
+            alert(data.message);
+        }
+
+        async function addPrescription() {
+            const prescriptionData = {
+                pid: document.getElementById("p_pid").value,
+                date: document.getElementById("p_date").value,
+                doctor: document.getElementById("p_doctor").value,
+                medicine: document.getElementById("p_medicine").value,
+                description: document.getElementById("p_description").value,
+                end: document.getElementById("p_end").value,
+                time: document.getElementById("p_time").value
+            };
+
+            const response = await fetch('/add_prescription', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(prescriptionData)
+            });
+
+            const data = await response.json();
+            alert(data.message);
+        }
+
+        async function getPatient() {
+            const pid = document.getElementById("g_pid").value;
+            const response = await fetch(`/get_patient/${pid}`);
+            const data = await response.json();
+        
+            if (data.error) {
+                document.getElementById("patientDetails").innerHTML = `<div class="error">${data.error}</div>`;
+            } else {
+                document.getElementById("patientDetails").innerHTML = `
+                    <table class="styled-table">
+                        <tr><th>Name</th><td>${data.name}</td></tr>
+                        <tr><th>Age</th><td>${data.age}</td></tr>
+                        <tr><th>Gender</th><td>${data.gender}</td></tr>
+                        <tr><th>Weight</th><td>${data.weight} kg</td></tr>
+                        <tr><th>Caretaker(s)</th><td>${data.caretaker.join(", ")}</td></tr>
+                        <tr><th>ID ON</th><td>${data.idON ? "Yes" : "No"}</td></tr>
+                        <tr><th>Application ID</th><td>${data.application_id}</td></tr>
+                    </table>
+                `;
+            }
+        }
+        
+        async function getPrescriptions() {
+            // const pid = document.getElementById("g_pid").value;
+            // const response = await fetch(`/get_prescriptions/${pid}`);
+            // const data = await response.json();
+
+        
+            // if (data.length === 0) {
+            //     document.getElementById("prescriptionDetails").innerHTML = `<div class="error">No prescriptions found.</div>`;
+            //     return;
+            // }
+        
+            // let formattedPrescriptions = `<table class="styled-table">
+            //     <tr>
+            //         <th>#</th><th>Date</th><th>Doctor</th><th>Medicine</th><th>Description</th><th>End Date</th><th>Time</th>
+            //     </tr>`;
+        
+            // data.forEach((prescription, index) => {
+            //     formattedPrescriptions += `
+            //         <tr>
+            //             <td>${index + 1}</td>
+            //             <td>${prescription.date}</td>
+            //             <td>${prescription.doctor}</td>
+            //             <td>${prescription.medicine}</td>
+            //             <td>${prescription.description}</td>
+            //             <td>${prescription.end}</td>
+            //             <td>${prescription.time}</td>
+            //         </tr>
+            //     `;
+            // });
+        
+            // formattedPrescriptions += `</table>`;
+            // document.getElementById("prescriptionDetails").innerHTML = formattedPrescriptions;
+            const response = await fetch(`/get_prescriptions/${pid}`);
+            const data = await response.json();
+        
+            if (data.error) {
+                document.getElementById("prescriptionDetails").innerHTML = `<div class="error">${data.error}</div>`;
+            } else {
+                document.getElementById("prescriptionDetails").innerHTML = `
+                    <table class="styled-table">
+                        <tr><th>Name</th><td>${data.name}</td></tr>
+                        <tr><th>Age</th><td>${data.age}</td></tr>
+                        <tr><th>Gender</th><td>${data.gender}</td></tr>
+                        <tr><th>Weight</th><td>${data.weight} kg</td></tr>
+                        <tr><th>Caretaker(s)</th><td>${data.caretaker.join(", ")}</td></tr>
+                        <tr><th>ID ON</th><td>${data.idON ? "Yes" : "No"}</td></tr>
+                        <tr><th>Application ID</th><td>${data.application_id}</td></tr>
+                    </table>
+                `;
+            }
+        }
+        
+    </script>
+    </script>
+</body>
+</html>
